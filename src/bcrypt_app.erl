@@ -7,10 +7,12 @@
 
 -export([start/2, stop/1]).
 
+-spec start(normal,_) -> {error,_} | {ok,pid()}.
 start(normal, _Args) ->
     case bcrypt_sup:start_link() of
         {ok, Pid}          -> {ok, Pid};
         {error, _} = Error -> Error
     end.
 
+-spec stop(_) -> ok.
 stop(_State) -> ok.

@@ -8,15 +8,23 @@
 -export([mechanism/0]).
 -export([gen_salt/0, gen_salt/1, hashpw/2]).
 
+-spec start() -> ok | {error, Reason::term()}.
 start() -> application:start(bcrypt).
+
+-spec stop() -> ok | {error, Reason::term()}.
 stop()  -> application:stop(bcrypt).
 
+-spec mechanism() -> nif | port.
 mechanism() ->
     {ok, M} = application:get_env(bcrypt, mechanism),
     M.
 
+-spec gen_salt() -> {ok, string()}.
 gen_salt() -> do_gen_salt(mechanism()).
+
+-spec gen_salt(term()) -> {ok, string()}.
 gen_salt(Rounds) -> do_gen_salt(mechanism(), Rounds).
+
 hashpw(Password, Salt) -> do_hashpw(mechanism(), Password, Salt).
 
 do_gen_salt(nif)  -> bcrypt_nif_worker:gen_salt();
